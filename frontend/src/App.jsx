@@ -1,0 +1,43 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Interview from "./pages/Interview";
+import Result from "./pages/Result";
+import History from "./pages/History";
+import Profile from "./pages/Profile";
+import Register from "./pages/Register";
+import { ToastContainer } from "react-toastify";
+
+function App() {
+  return (  
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/interview" element={<Interview />} />
+        <Route path="/result" element={<Result />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+      <ToastContainer 
+  position="top-right"
+  autoClose={3000}
+  hideProgressBar={false}
+  newestOnTop={false}
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="dark" // Dark theme looks much better with your #0F172A navy accents
+  toastClassName="bg-[#0F172A] border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl"
+  bodyClassName="font-sans text-xs font-black uppercase tracking-widest"
+  progressClassName="bg-gradient-to-r from-violet-600 to-cyan-400"
+/>
+    </Router>
+  );
+}
+
+export default App;
