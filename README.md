@@ -27,3 +27,17 @@ Backend:
 cd backend
 npm install
 npm run dev
+
+## 📸 Screenshots
+
+### Login Page
+![Login](screenshots/login.png)
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Interview
+![Interview](screenshots/interview.png)
+
+### Result
+![Result](screenshots/result.png)
