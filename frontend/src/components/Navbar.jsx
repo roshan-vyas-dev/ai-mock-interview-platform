@@ -24,13 +24,17 @@ function Navbar() {
     }
   }, [dark]);
 
-  const handleLogout = () => {
-    toast.info("Logged out successfully", {
-      theme: dark ? "dark" : "light",
-      icon: "👋"
-    });
-    navigate("/");
-  };
+const handleLogout = () => {
+
+  localStorage.removeItem("token");
+
+  toast.info("Logged out successfully", {
+    theme: dark ? "dark" : "light",
+    icon: "👋"
+  });
+
+  navigate("/");
+};
 
   const isActive = (path) => location.pathname === path;
 
@@ -91,9 +95,9 @@ function Navbar() {
           {/* DESKTOP LOGOUT (Hidden on mobile) */}
           <button
             onClick={handleLogout}
-            className="hidden md:flex relative items-center gap-2 bg-[#0F172A] dark:bg-white text-white dark:text-[#0F172A] px-5 py-2.5 rounded-xl transition-all active:scale-95 shadow-md"
+            className="hidden md:flex relative items-center gap-2 bg-[#0F172A] hover:bg-red-400 dark:bg-white dark:hover:bg-red-400  dark:hover:text-white  text-white dark:text-[#0F172A] px-5 py-2.5 rounded-xl transition-all active:scale-95 shadow-md"
           >
-            <span className="text-[9px] font-black uppercase tracking-widest leading-none">Logout</span>
+            <span className="text-[9px] font-black  uppercase tracking-widest leading-none">Logout</span>
           </button>
 
           {/* MOBILE MENU TOGGLE (Visible only on mobile) */}
