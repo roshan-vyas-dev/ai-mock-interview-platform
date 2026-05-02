@@ -1,10 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Interview() {
   const navigate = useNavigate();
-  const [time, setTime] = useState(30); 
+  const [time, setTime] = useState(30);
   const [answer, setAnswer] = useState("");
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+
+
+  useEffect(() => {
+
+    const fetchQuestions = async () => {
+
+      try {
+
+        const res = await axios.get(
+          "http://localhost:5000/api/questions"
+        );
+
+        setQuestions(res.data);
+
+      } catch (error) {
+
+        console.log(error);
+
+      } finally {
+
+        setLoading(false);
+
+      }
+    };
+
+    fetchQuestions();
+
+  }, []);
 
   useEffect(() => {
     if (time === 0) {
@@ -17,10 +49,26 @@ function Interview() {
     return () => clearInterval(timer);
   }, [time, navigate]);
 
+
+  const handleNextQuestion = () => {
+
+    if (currentQuestion < questions.length - 1) {
+
+      setCurrentQuestion(currentQuestion + 1);
+
+      setAnswer("");
+
+    } else {
+
+      navigate("/result");
+
+    }
+  };
+
   return (
     // h-screen and overflow-hidden ensures no scrolling
     <div className="h-screen w-full bg-[#E2E8F0] relative overflow-hidden font-sans flex flex-col p-6 md:p-10">
-      
+
       {/* Aurora Silk Background Accents */}
       <div className="absolute top-[-5%] left-[-5%] w-[35rem] h-[35rem] bg-violet-400/20 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-5%] right-[-10%] w-[30rem] h-[30rem] bg-cyan-400/20 rounded-full blur-[100px] pointer-events-none" />
@@ -45,16 +93,40 @@ function Interview() {
 
       {/* MAIN SECTION: Uses flex-1 to fill the remaining screen space */}
       <main className="relative z-10 flex-1 flex flex-col gap-6 max-w-5xl mx-auto w-full overflow-hidden">
-        
+
         {/* QUESTION CARD */}
         <div className="bg-white/40 backdrop-blur-2xl border border-white/60 rounded-[32px] p-8 shadow-xl">
           <div className="flex items-center gap-4 mb-3">
-            <span className="bg-violet-600 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Question 01</span>
+            <span className="bg-violet-600 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Question {currentQuestion + 1}</span>
             <div className="h-[1px] flex-1 bg-slate-300/50" />
           </div>
-          <h2 className="text-xl md:text-2xl font-bold text-[#0F172A] leading-snug">
-            "What is React and how does it work in the context of a modern web architecture?"
-          </h2>
+          {loading ? (
+
+            <p className="text-lg font-bold text-slate-500">
+              Loading questions...
+            </p>
+
+          ) : questions.length > 0 ? (
+
+            <div>
+
+              <h2 className="text-xl md:text-2xl font-bold text-[#0F172A] leading-snug">
+                {questions[currentQuestion].question}
+              </h2>
+
+              <p className="mt-4 text-sm font-semibold text-violet-600 uppercase tracking-widest">
+                {questions[currentQuestion].category} • {questions[currentQuestion].difficulty}
+              </p>
+
+            </div>
+
+          ) : (
+
+            <p className="text-red-500 font-bold">
+              No questions found
+            </p>
+
+          )}
         </div>
 
         {/* ANSWER AREA: flex-1 makes the textarea fill the rest of the height */}
@@ -75,12 +147,14 @@ function Interview() {
               Status: <span className="text-emerald-600">Syncing with Gemini AI</span>
             </p>
           </div>
-          
+
           <button
-            onClick={() => navigate("/result")}
+            onClick={handleNextQuestion}
             className="group relative bg-[#0F172A] text-white font-black px-12 py-5 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all overflow-hidden"
           >
-            <span className="relative z-10 uppercase tracking-[0.2em] text-xs">Complete Assessment</span>
+            <span className="relative z-10 uppercase tracking-[0.2em] text-xs">{currentQuestion === questions.length - 1
+              ? "Complete Assessment"
+              : "Next Question"}</span>
             <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </button>
         </footer>
