@@ -4,132 +4,173 @@ import axios from "axios";
 
 function Interview() {
   const navigate = useNavigate();
-  const [time, setTime] = useState(30);
+  const [time, setTime] = useState(120);
   const [answer, setAnswer] = useState("");
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [allAnswers, setAllAnswers] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
 
+  // Get topic and difficulty from localStorage
+  const topic = localStorage.getItem("topic") || "General";
+  const difficulty = localStorage.getItem("difficulty") || "Easy";
 
   useEffect(() => {
-
     const fetchQuestions = async () => {
-
       try {
-
+        const token = localStorage.getItem("token");
         const res = await axios.get(
-          "http://localhost:5000/api/questions"
+          `http://localhost:5000/api/questions?topic=${topic}&difficulty=${difficulty}`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-
         setQuestions(res.data);
-
       } catch (error) {
-
         console.log(error);
-
       } finally {
-
         setLoading(false);
-
       }
     };
-
     fetchQuestions();
-
   }, []);
+
+  // Timer resets for each question
+  useEffect(() => {
+    setTime(120);
+  }, [currentQuestion]);
 
   useEffect(() => {
     if (time === 0) {
-      navigate("/result");
+      handleNextQuestion();
       return;
     }
     const timer = setInterval(() => {
       setTime((prev) => prev - 1);
     }, 1000);
     return () => clearInterval(timer);
-  }, [time, navigate]);
+  }, [time]);
 
-
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
+    // Save current answer
+    const currentAnswers = [
+      ...allAnswers,
+      {
+        question: questions[currentQuestion]?.question || "",
+        userAnswer: answer || "No answer provided",
+      },
+    ];
+    setAllAnswers(currentAnswers);
+    setAnswer("");
 
     if (currentQuestion < questions.length - 1) {
-
       setCurrentQuestion(currentQuestion + 1);
-
-      setAnswer("");
-
     } else {
-
-      navigate("/result");
-
+      // Submit all answers to backend
+      await submitInterview(currentAnswers);
     }
   };
 
+  const submitInterview = async (finalAnswers) => {
+    setSubmitting(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.post(
+        "http://localhost:5000/api/interview/submit",
+        {
+          topic,
+          difficulty,
+          answers: finalAnswers,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // Save interview ID to localStorage for result page
+      localStorage.setItem("interviewId", res.data.interview._id);
+      navigate("/result");
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong! Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (submitting) {
+    return (
+      <div className="h-screen w-full bg-[#E2E8F0] flex flex-col items-center justify-center">
+        <div className="bg-white/40 backdrop-blur-2xl border border-white/60 rounded-[32px] p-12 shadow-xl text-center">
+          <div className="w-16 h-16 border-4 border-violet-600 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+          <h2 className="text-2xl font-black text-[#0F172A]">
+            AI is grading your answers...
+          </h2>
+          <p className="text-slate-500 mt-2">This may take a few seconds</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    // h-screen and overflow-hidden ensures no scrolling
     <div className="h-screen w-full bg-[#E2E8F0] relative overflow-hidden font-sans flex flex-col p-6 md:p-10">
 
       {/* Aurora Silk Background Accents */}
       <div className="absolute top-[-5%] left-[-5%] w-[35rem] h-[35rem] bg-violet-400/20 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-5%] right-[-10%] w-[30rem] h-[30rem] bg-cyan-400/20 rounded-full blur-[100px] pointer-events-none" />
 
-      {/* HEADER: Fixed at top */}
+      {/* HEADER */}
       <header className="relative z-10 flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-black text-[#0F172A] tracking-tighter italic">
             Fluen<span className="text-violet-600">tia</span>
           </h1>
-          <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">AI Interactive Session</p>
+          <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">
+            AI Interactive Session
+          </p>
         </div>
 
-        {/* Dynamic Timer Card */}
+        {/* Timer */}
         <div className="bg-[#0F172A] px-6 py-3 rounded-2xl shadow-2xl border border-white/10 flex items-center gap-3">
-          <div className={`w-2 h-2 rounded-full ${time < 10 ? 'bg-red-500 animate-pulse' : 'bg-cyan-400'}`} />
+          <div className={`w-2 h-2 rounded-full ${time < 30 ? "bg-red-500 animate-pulse" : "bg-cyan-400"}`} />
           <span className="text-white font-mono text-xl font-black tracking-widest">
-            00:{time < 10 ? `0${time}` : time}
+            {Math.floor(time / 60)}:{time % 60 < 10 ? `0${time % 60}` : time % 60}
           </span>
         </div>
       </header>
 
-      {/* MAIN SECTION: Uses flex-1 to fill the remaining screen space */}
+      {/* MAIN */}
       <main className="relative z-10 flex-1 flex flex-col gap-6 max-w-5xl mx-auto w-full overflow-hidden">
+
+        {/* Progress bar */}
+        <div className="w-full bg-slate-300/50 rounded-full h-2">
+          <div
+            className="bg-violet-600 h-2 rounded-full transition-all duration-500"
+            style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+          />
+        </div>
 
         {/* QUESTION CARD */}
         <div className="bg-white/40 backdrop-blur-2xl border border-white/60 rounded-[32px] p-8 shadow-xl">
           <div className="flex items-center gap-4 mb-3">
-            <span className="bg-violet-600 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Question {currentQuestion + 1}</span>
+            <span className="bg-violet-600 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">
+              Question {currentQuestion + 1} of {questions.length}
+            </span>
             <div className="h-[1px] flex-1 bg-slate-300/50" />
           </div>
           {loading ? (
-
-            <p className="text-lg font-bold text-slate-500">
-              Loading questions...
-            </p>
-
+            <p className="text-lg font-bold text-slate-500">Loading questions...</p>
           ) : questions.length > 0 ? (
-
             <div>
-
               <h2 className="text-xl md:text-2xl font-bold text-[#0F172A] leading-snug">
-                {questions[currentQuestion].question}
+                {questions[currentQuestion]?.question}
               </h2>
-
               <p className="mt-4 text-sm font-semibold text-violet-600 uppercase tracking-widest">
-                {questions[currentQuestion].category} • {questions[currentQuestion].difficulty}
+                {questions[currentQuestion]?.category} • {questions[currentQuestion]?.difficulty}
               </p>
-
             </div>
-
           ) : (
-
-            <p className="text-red-500 font-bold">
-              No questions found
-            </p>
-
+            <p className="text-red-500 font-bold">No questions found</p>
           )}
         </div>
 
-        {/* ANSWER AREA: flex-1 makes the textarea fill the rest of the height */}
+        {/* ANSWER AREA */}
         <div className="flex-1 relative flex flex-col overflow-hidden">
           <div className="absolute -inset-1 bg-gradient-to-r from-violet-500/20 to-cyan-400/20 rounded-[34px] blur-sm"></div>
           <textarea
@@ -140,21 +181,20 @@ function Interview() {
           />
         </div>
 
-        {/* FOOTER ACTION: Fixed at bottom */}
+        {/* FOOTER */}
         <footer className="flex justify-between items-center py-2">
           <div className="hidden md:block">
             <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
-              Status: <span className="text-emerald-600">Syncing with Gemini AI</span>
+              Status: <span className="text-emerald-600">Powered by Groq AI</span>
             </p>
           </div>
-
           <button
             onClick={handleNextQuestion}
             className="group relative bg-[#0F172A] text-white font-black px-12 py-5 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all overflow-hidden"
           >
-            <span className="relative z-10 uppercase tracking-[0.2em] text-xs">{currentQuestion === questions.length - 1
-              ? "Complete Assessment"
-              : "Next Question"}</span>
+            <span className="relative z-10 uppercase tracking-[0.2em] text-xs">
+              {currentQuestion === questions.length - 1 ? "Complete Assessment" : "Next Question"}
+            </span>
             <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </button>
         </footer>

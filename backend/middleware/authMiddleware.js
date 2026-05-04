@@ -4,24 +4,18 @@ const protect = (req, res, next) => {
     try {
         let token;
 
-        // Get token from headers
         if (req.headers.authorization) {
             token = req.headers.authorization.split(" ")[1];
         }
 
-        // No token
         if (!token) {
             return res.status(401).json({
                 message: "Not authorized",
             });
         }
 
-        // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        // Save user data
         req.user = decoded;
-
         next();
 
     } catch (error) {
@@ -31,4 +25,15 @@ const protect = (req, res, next) => {
     }
 };
 
-module.exports = protect;
+const adminOnly = (req, res, next) => {
+    if (req.user && req.user.role === "admin") {
+        next();
+    } else {
+        res.status(403).json({
+            message: "Admin access only",
+        });
+    }
+};
+
+// Export both functions
+module.exports = { protect, adminOnly };

@@ -1,33 +1,26 @@
-const dotenv = require("dotenv");
+require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
 const authRoutes = require("./routes/authRoutes");
-
-
 const questionRoutes = require("./routes/questionRoutes");
-
-
-dotenv.config();
+const interviewRoutes = require("./routes/interviewRoutes");
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/questions", questionRoutes);
+app.use("/api/interview", interviewRoutes);
 
-
-// Test route
 app.get("/", (req, res) => {
   res.json({ message: "AI Mock Interview API is running!" });
 });
 
-// Connect to MongoDB and start server
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
@@ -39,4 +32,3 @@ mongoose
   .catch((err) => {
     console.log("MongoDB connection error:", err);
   });
-
