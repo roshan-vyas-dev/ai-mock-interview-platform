@@ -1,95 +1,188 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Navbar from "../components/Navbar";
 
 function History() {
-  const sessions = [
-    { id: 1, topic: "React Fundamentals", score: 8, date: "Apr 01, 2026", type: "Technical" },
-    { id: 2, topic: "Node.js Architecture", score: 7, date: "Apr 03, 2026", type: "Backend" },
-    { id: 3, topic: "MongoDB Schema Design", score: 9, date: "Apr 05, 2026", type: "Database" },
-  ];
+  const navigate = useNavigate();
+  const [interviews, setInterviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("All");
+
+  const topics = ["All", "React", "Node.js", "MongoDB", "JavaScript", "DSA", "General"];
+
+  useEffect(() => {
+    fetchHistory();
+  }, []);
+
+  const fetchHistory = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
+        "http://localhost:5000/api/interview/my-interviews",
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setInterviews(res.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filtered = filter === "All"
+    ? interviews
+    : interviews.filter(i => i.topic === filter);
+
+  const getScoreColor = (score) => {
+    const num = parseInt(score?.split("/")[0] || 0);
+    if (num >= 8) return "text-emerald-600";
+    if (num >= 5) return "text-amber-600";
+    return "text-red-500";
+  };
+
+  if (loading) {
+    return (
+      <div className="h-screen w-full bg-[#E2E8F0] flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-violet-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="h-screen w-full bg-[#E2E8F0] dark:bg-[#020617] transition-colors duration-500 relative overflow-hidden font-sans flex flex-col">
-      {/* 1. Global Navbar */}
-      <Navbar />
+    // Fixed shaking with overflow-x-hidden and optimized vertical scroll
+    <div className="min-h-screen w-full bg-[#E2E8F0] relative font-sans flex flex-col overflow-x-hidden touch-pan-y">
 
-      {/* 2. Scrollable Content Area */}
-      <div className="flex-1 overflow-y-auto p-6 md:p-12 relative">
-        
-        {/* Aurora Silk Background Accents */}
-        <div className="absolute top-[-10%] left-[-5%] w-[45rem] h-[45rem] bg-violet-400/10 dark:bg-violet-500/5 rounded-full blur-[130px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40rem] h-[40rem] bg-cyan-400/20 dark:bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
+      {/* FIXED NAVBAR */}
+      <div className="fixed top-0 left-0 w-full z-50">
+        <Navbar />
+      </div>
 
-        <div className="max-w-4xl mx-auto relative z-10">
-          
-          {/* Header Section */}
-          <div className="flex justify-between items-end mb-10">
-            <div>
-              <h1 className="text-4xl font-black text-[#0F172A] dark:text-white tracking-tight italic">
-                Session<span className="text-violet-600 dark:text-violet-400">Archive</span>
-              </h1>
-              <p className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.4em] mt-2">
-                Comprehensive Interview History
-              </p>
-            </div>
-            <Link to="/dashboard" className="hidden md:block text-[10px] font-black text-violet-600 dark:text-cyan-400 uppercase tracking-widest hover:text-cyan-500 dark:hover:text-white transition-colors border-b-2 border-violet-600/20 dark:border-cyan-400/20 pb-1">
-              Back to Dashboard
-            </Link>
+      {/* BACKGROUND ACCENTS - Fixed position */}
+      <div className="fixed top-[-5%] left-[-5%] w-[25rem] md:w-[35rem] h-[25rem] md:h-[35rem] bg-violet-400/20 rounded-full blur-[80px] md:blur-[120px] pointer-events-none" />
+      <div className="fixed bottom-[-5%] right-[-10%] w-[20rem] md:w-[30rem] h-[20rem] md:h-[30rem] bg-cyan-400/20 rounded-full blur-[80px] md:blur-[100px] pointer-events-none" />
+
+      {/* MAIN CONTENT - pt-24/32 to clear the fixed Navbar */}
+      <div className="relative z-10 max-w-5xl mx-auto w-full p-5 md:p-10 pt-24 md:pt-32">
+
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-black text-[#0F172A] tracking-tighter">
+            Interview <span className="text-violet-600">History</span>
+          </h1>
+          <p className="text-slate-500 font-medium mt-1 text-sm">
+            {interviews.length} total sessions completed
+          </p>
+        </div>
+
+        {/* FILTER TOPICS - Improved wrapping for mobile */}
+        <div className="flex gap-2 flex-wrap mb-8">
+          {topics.map((topic) => (
+            <button
+              key={topic}
+              onClick={() => setFilter(topic)}
+              className={`text-[9px] md:text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest transition-all transform-gpu
+                ${filter === topic
+                  ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30"
+                  : "bg-white/40 border border-white/60 text-slate-600 hover:scale-[1.05] active:scale-95"
+                }`}
+            >
+              {topic}
+            </button>
+          ))}
+        </div>
+
+        {/* INTERVIEW LIST */}
+        {filtered.length === 0 ? (
+          <div className="bg-white/40 backdrop-blur-2xl border border-white/60 rounded-[24px] p-8 md:p-12 text-center">
+            <p className="text-3xl mb-2">📭</p>
+            <p className="font-black text-[#0F172A]">No sessions found!</p>
+            <p className="text-slate-500 text-sm mt-1">
+              Try a different filter or start a new interview
+            </p>
+            <button
+              onClick={() => navigate("/topics")}
+              className="mt-6 bg-violet-600 text-white font-black px-8 py-3 rounded-2xl text-xs uppercase tracking-widest hover:scale-[1.03] active:scale-95 transition-all transform-gpu"
+            >
+              Start Interview
+            </button>
           </div>
-
-          {/* --- INTERVIEW HISTORY LIST --- */}
-          <div className="space-y-4">
-            {sessions.map((session) => (
+        ) : (
+          <div className="flex flex-col gap-4 mb-12">
+            {filtered.map((interview, index) => (
               <div
-                key={session.id}
-                className="group bg-white/50 dark:bg-white/5 backdrop-blur-xl border border-white dark:border-white/10 rounded-[32px] p-6 md:p-8 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex justify-between items-center"
+                key={interview._id}
+                onClick={() => {
+                  localStorage.setItem("interviewId", interview._id);
+                  navigate("/result");
+                }}
+                className="bg-white/40 backdrop-blur-2xl border border-white/60 rounded-[24px] p-5 md:p-6 shadow-lg cursor-pointer hover:scale-[1.01] transition-all transform-gpu will-change-transform"
               >
-                <div className="flex items-center gap-6">
-                  {/* Visual Indicator Icon */}
-                  <div className="w-14 h-14 bg-[#0F172A] dark:bg-violet-600/20 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:bg-gradient-to-br group-hover:from-violet-600 group-hover:to-cyan-500 transition-all duration-500">
-                    <svg className="w-6 h-6 text-white dark:text-violet-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04" />
-                    </svg>
-                  </div>
+                <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                  <div className="flex-1 w-full">
 
-                  <div>
-                    <div className="flex items-center gap-3 mb-1">
-                      <h2 className="text-xl font-bold text-[#0F172A] dark:text-white tracking-tight">
-                        {session.topic}
-                      </h2>
-                      <span className="text-[8px] font-black bg-[#0F172A] dark:bg-violet-600 px-2 py-0.5 rounded-md text-white uppercase tracking-widest">
-                        {session.type}
+                    {/* Session number and badges */}
+                    <div className="flex items-center gap-2 mb-3 flex-wrap">
+                      <span className="text-[9px] font-black text-slate-400 uppercase">
+                        Session #{interviews.length - index}
+                      </span>
+                      <span className="bg-violet-600 text-white text-[9px] font-black px-2 py-1 rounded-full uppercase">
+                        {interview.topic}
+                      </span>
+                      <span className={`text-[9px] font-black px-2 py-1 rounded-full uppercase
+                        ${interview.difficulty === "Easy" ? "bg-emerald-100 text-emerald-700" :
+                          interview.difficulty === "Medium" ? "bg-amber-100 text-amber-700" :
+                            "bg-red-100 text-red-700"}`}>
+                        {interview.difficulty}
                       </span>
                     </div>
-                    <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold flex items-center gap-2 uppercase tracking-tight">
-                      <svg className="w-3 h-3 text-violet-500 dark:text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                      </svg>
-                      {session.date}
+
+                    {/* Questions count */}
+                    <p className="text-slate-500 text-xs mb-1">
+                      {interview.answers?.length} questions answered
+                    </p>
+
+                    {/* Date */}
+                    <p className="text-slate-400 text-xs">
+                      {new Date(interview.createdAt).toLocaleDateString("en-IN", {
+                        weekday: "short",
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </p>
+                  </div>
+
+                  {/* Score */}
+                  <div className="text-left sm:text-right w-full sm:w-auto flex sm:flex-col items-baseline sm:items-end gap-1">
+                    <p className={`text-3xl md:text-4xl font-black ${getScoreColor(interview.totalScore)}`}>
+                      {interview.totalScore?.split("/")[0]}
+                    </p>
+                    <span className="text-slate-400 text-xs sm:hidden">/10 Score</span>
+                    <p className="hidden sm:block text-slate-400 text-xs">/10</p>
+                    <p className="hidden sm:block text-[9px] text-slate-400 uppercase tracking-widest mt-1">
+                      Score
                     </p>
                   </div>
                 </div>
 
-                {/* Score Section */}
-                <div className="text-right">
-                  <p className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Proficiency</p>
-                  <div className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#0F172A] to-slate-600 dark:from-white dark:to-slate-400 group-hover:from-violet-600 group-hover:to-cyan-500 transition-all duration-500">
-                    {session.score}<span className="text-slate-300 dark:text-slate-600 text-lg">/10</span>
-                  </div>
+                {/* Overall feedback preview */}
+                <div className="mt-4 bg-[#0F172A]/5 rounded-2xl p-4">
+                  <p className="text-slate-500 text-xs line-clamp-2 leading-relaxed italic">
+                    "{interview.overallFeedback}"
+                  </p>
                 </div>
+
+                {/* View details hint */}
+                <p className="text-violet-600 text-[10px] font-black uppercase tracking-widest mt-3 text-right">
+                  Click to view details →
+                </p>
+
               </div>
             ))}
           </div>
+        )}
 
-          {/* Footer Label */}
-          <div className="mt-16 text-center">
-            <div className="h-[1px] w-24 bg-slate-300 dark:bg-slate-800 mx-auto mb-4" />
-            <p className="text-slate-400 dark:text-slate-600 text-[9px] font-black uppercase tracking-[0.4em]">
-              Secure Data Storage Active
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

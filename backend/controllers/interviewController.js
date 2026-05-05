@@ -6,14 +6,24 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 // SUBMIT INTERVIEW
 exports.submitInterview = async (req, res) => {
   try {
+    console.log("=== SUBMIT INTERVIEW CALLED ===");
+    console.log("User:", req.user);
+    console.log("Body:", req.body);
+
     const { topic, difficulty, answers } = req.body;
     const userId = req.user.id;
+
+    console.log("Topic:", topic);
+    console.log("Difficulty:", difficulty);
+    console.log("Answers count:", answers.length);
 
     // Grade each answer with Groq AI
     const gradedAnswers = [];
 
     for (let i = 0; i < answers.length; i++) {
       const { question, userAnswer } = answers[i];
+
+      console.log(`Grading question ${i + 1}:`, question);
 
       const prompt = `
 You are an expert interview evaluator.
@@ -29,6 +39,8 @@ Feedback: your feedback here`;
       });
 
       const text = completion.choices[0].message.content;
+      console.log(`AI Response for Q${i + 1}:`, text);
+
       const scoreMatch = text.match(/\d+\/10/);
       const score = scoreMatch ? scoreMatch[0] : "5/10";
       const feedback = text.split("Feedback:")[1]?.trim() || "Good attempt!";
@@ -43,13 +55,15 @@ Feedback: your feedback here`;
     }
 
     // Calculate total score
-    const scores = gradedAnswers.map(a => 
+    const scores = gradedAnswers.map(a =>
       parseInt(a.score.split("/")[0])
     );
     const avg = Math.round(
       scores.reduce((a, b) => a + b, 0) / scores.length
     );
     const totalScore = `${avg}/10`;
+
+    console.log("Total Score:", totalScore);
 
     const newInterview = new Interview({
       user: userId,
@@ -62,6 +76,7 @@ Feedback: your feedback here`;
     });
 
     await newInterview.save();
+    console.log("=== INTERVIEW SAVED SUCCESSFULLY ===");
 
     res.status(201).json({
       message: "Interview submitted successfully",
@@ -69,7 +84,10 @@ Feedback: your feedback here`;
     });
 
   } catch (error) {
-    console.log(error);
+    console.log("=== ERROR IN SUBMIT INTERVIEW ===");
+    console.log("Error message:", error.message);
+    console.log("Error status:", error.status);
+    console.log("Full error:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -77,8 +95,8 @@ Feedback: your feedback here`;
 // GET USER INTERVIEWS
 exports.getUserInterviews = async (req, res) => {
   try {
-    const interviews = await Interview.find({ 
-      user: req.user.id 
+    const interviews = await Interview.find({
+      user: req.user.id
     }).sort({ createdAt: -1 });
 
     res.status(200).json(interviews);

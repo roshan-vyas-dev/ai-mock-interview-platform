@@ -9,6 +9,11 @@ import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./components/ProtectedRoute";
+import TopicSelect from "./pages/TopicSelect";
+import AdminDashboard from "./admin/AdminDashboard";
+import AdminQuestions from "./admin/AdminQuestions";
+import AdminUsers from "./admin/AdminUsers";
+import AdminSessions from "./admin/AdminSessions";
 
 function App() {
   return (
@@ -20,7 +25,12 @@ function App() {
         <Route path="/interview" element={<Interview />} />
         <Route path="/result" element={<Result />} />
         <Route path="/history" element={<History />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/topics" element={<ProtectedRoute><TopicSelect /></ProtectedRoute>} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/questions" element={<AdminQuestions />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
+        <Route path="/admin/sessions" element={<AdminSessions />} />
       </Routes>
       <ToastContainer
         position="top-right"
