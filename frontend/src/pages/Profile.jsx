@@ -99,15 +99,20 @@ function Profile() {
 
   if (loading) {
     return (
-      <div className="h-screen w-full bg-[#E2E8F0] flex items-center justify-center">
+      <div className="h-screen w-full bg-[#E2E8F0] dark:bg-[#0F172A]  flex items-center justify-center">
         <div className="w-16 h-16 border-4 border-violet-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    // overflow-x-hidden and touch-pan-y prevent horizontal shaking and maintain vertical scroll
-    <div className="min-h-screen w-full bg-[#E2E8F0] relative font-sans flex flex-col overflow-x-hidden touch-pan-y">
+    <div className="min-h-screen w-full bg-[#E2E8F0] dark:bg-[#0F172A] relative font-sans flex flex-col overflow-x-hidden touch-pan-y">
+
+      {/* 1. TOP LEFT ACCENT */}
+  <div className="fixed top-[-5%] left-[-5%] w-[20rem] md:w-[35rem] h-[20rem] md:h-[35rem] bg-violet-400/20 dark:bg-violet-600/10 rounded-full blur-[80px] md:blur-[120px] pointer-events-none" />
+
+  {/* 2. BOTTOM RIGHT ACCENT */}
+  <div className="fixed bottom-[-5%] right-[-10%] w-[18rem] md:w-[30rem] h-[18rem] md:h-[30rem] bg-cyan-400/20 dark:bg-cyan-600/10 rounded-full blur-[80px] md:blur-[100px] pointer-events-none" />
 
       {/* FIXED NAVBAR */}
       <div className="fixed top-0 left-0 w-full z-50">
@@ -123,7 +128,7 @@ function Profile() {
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-black text-[#0F172A] tracking-tighter">
+          <h1 className="text-3xl md:text-4xl font-black text-[#0F172A] dark:text-white tracking-tighter">
             My <span className="text-violet-600">Profile</span>
           </h1>
           <p className="text-slate-500 font-medium mt-1 text-sm">
@@ -146,7 +151,7 @@ function Profile() {
         </div>
 
         {/* Profile card */}
-        <div className="bg-white/40 backdrop-blur-2xl border border-white/60 rounded-[32px] p-6 md:p-8 shadow-xl mb-6">
+        <div className="bg-white/40 dark:bg-white/5 backdrop-blur-2xl border border-white/60 dark:border-white/10 rounded-[32px] p-6 md:p-8 shadow-xl mb-6">
 
           {/* Avatar and name - Wrapped for responsiveness */}
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-8 text-center sm:text-left">
@@ -154,7 +159,7 @@ function Profile() {
               {user?.name?.charAt(0).toUpperCase()}
             </div>
             <div className="overflow-hidden w-full">
-              <h2 className="text-2xl font-black text-[#0F172A] truncate">
+              <h2 className="text-2xl font-black text-[#0F172A]  dark:text-white  truncate">
                 {user?.name}
               </h2>
               <p className="text-slate-500 text-sm truncate">{user?.email}</p>
@@ -167,11 +172,11 @@ function Profile() {
 
           {/* Account info - Changed grid for mobile */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            <div className="bg-white/40 rounded-2xl p-4">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+            <div className="bg-white/40  dark:bg-white/5 rounded-2xl p-4">
+              <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">
                 Member Since
               </p>
-              <p className="text-[#0F172A] font-black text-sm">
+              <p className="text-[#0F172A]  dark:text-white font-black text-sm">
                 {new Date(user?.createdAt).toLocaleDateString("en-IN", {
                   day: "numeric",
                   month: "short",
@@ -179,11 +184,11 @@ function Profile() {
                 })}
               </p>
             </div>
-            <div className="bg-white/40 rounded-2xl p-4">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+            <div className="bg-white/40 dark:bg-white/5 rounded-2xl p-4">
+              <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">
                 Account Status
               </p>
-              <p className="text-emerald-600 font-black text-sm">
+              <p className="text-emerald-600 dark:text-emerald-400 font-black text-sm">
                 ● Active
               </p>
             </div>
@@ -194,7 +199,7 @@ function Profile() {
             {!editing ? (
               <button
                 onClick={() => setEditing(true)}
-                className="w-full bg-white/40 border border-white/60 text-[#0F172A] font-black px-6 py-4 rounded-2xl text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all transform-gpu"
+                className="w-full bg-white/40 border border-white/60 text-[#0F172A] dark:text-white font-black px-6 py-4 rounded-2xl text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all transform-gpu"
               >
                 ✏️ Edit Name
               </button>
@@ -204,7 +209,7 @@ function Profile() {
                   type="text"
                   value={nameForm.name}
                   onChange={(e) => setNameForm({ name: e.target.value })}
-                  className="w-full bg-white/60 border border-white/60 rounded-2xl p-4 text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-violet-400 font-medium"
+                  className="w-full bg-white/60 dark:bg-white/10 border border-white/60 dark:border-white/10 rounded-2xl p-4 text-[#0F172A] dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-400 font-medium"
                   placeholder="Enter new name"
                 />
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -216,7 +221,7 @@ function Profile() {
                   </button>
                   <button
                     onClick={() => setEditing(false)}
-                    className="flex-1 bg-white/40 text-[#0F172A] font-black px-6 py-3 rounded-2xl text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all transform-gpu"
+                    className="flex-1 bg-white/40 text-[#0F172A] dark:text-white font-black px-6 py-3 rounded-2xl text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all transform-gpu"
                   >
                     Cancel
                   </button>
@@ -227,7 +232,7 @@ function Profile() {
             {!changingPassword ? (
               <button
                 onClick={() => setChangingPassword(true)}
-                className="w-full bg-white/40 border border-white/60 text-[#0F172A] font-black px-6 py-4 rounded-2xl text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all transform-gpu"
+                className="w-full bg-white/40  border border-white/60 text-[#0F172A] dark:text-white font-black px-6 py-4 rounded-2xl text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all transform-gpu"
               >
                 🔒 Change Password
               </button>
@@ -237,21 +242,21 @@ function Profile() {
                   type="password"
                   value={passwordForm.currentPassword}
                   onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                  className="w-full bg-white/60 border border-white/60 rounded-2xl p-4 text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-violet-400 font-medium"
+                  className="w-full bg-white/60 dark:bg-white/10 border border-white/60 dark:border-white/10 rounded-2xl p-4 text-[#0F172A] dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-400 font-medium"
                   placeholder="Current password"
                 />
                 <input
                   type="password"
                   value={passwordForm.newPassword}
                   onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                  className="w-full bg-white/60 border border-white/60 rounded-2xl p-4 text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-violet-400 font-medium"
+                  className="w-full bg-white/60 dark:bg-white/10 border border-white/60 dark:border-white/10 rounded-2xl p-4 text-[#0F172A] dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-400 font-medium"
                   placeholder="New password"
                 />
                 <input
                   type="password"
                   value={passwordForm.confirmPassword}
                   onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                  className="w-full bg-white/60 border border-white/60 rounded-2xl p-4 text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-violet-400 font-medium"
+                  className="w-full bg-white/60 dark:bg-white/10 border border-white/60 dark:border-white/10 rounded-2xl p-4 text-[#0F172A] dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-400 font-medium"
                   placeholder="Confirm new password"
                 />
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -263,7 +268,7 @@ function Profile() {
                   </button>
                   <button
                     onClick={() => setChangingPassword(false)}
-                    className="flex-1 bg-white/40 text-[#0F172A] font-black px-6 py-3 rounded-2xl text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all transform-gpu"
+                    className="flex-1 bg-white/40 text-[#0F172A] dark:text-white font-black px-6 py-3 rounded-2xl text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all transform-gpu"
                   >
                     Cancel
                   </button>
@@ -277,7 +282,7 @@ function Profile() {
         <div className="pb-12">
           <button
             onClick={handleLogout}
-            className="w-full bg-red-500/20 border border-red-300 text-red-600 font-black px-6 py-4 rounded-2xl text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all transform-gpu"
+            className="w-full bg-red-500/20 dark:bg-red-500/20 border border-red-300 dark:border-red-500/30 text-red-600 dark:text-red-400 font-black px-6 py-4 rounded-2xl text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all transform-gpu"
           >
             🚪 Logout
           </button>

@@ -33,8 +33,14 @@ function TopicSelect() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#E2E8F0] relative font-sans flex flex-col overflow-x-hidden">
-      
+    <div className="min-h-screen w-full bg-[#E2E8F0] dark:bg-[#0F172A] relative font-sans flex flex-col overflow-x-hidden">
+
+      {/* 1. TOP LEFT ACCENT */}
+      <div className="fixed top-[-5%] left-[-5%] w-[20rem] md:w-[35rem] h-[20rem] md:h-[35rem] bg-violet-400/20 dark:bg-violet-600/10 rounded-full blur-[80px] md:blur-[120px] pointer-events-none" />
+
+      {/* 2. BOTTOM RIGHT ACCENT */}
+      <div className="fixed bottom-[-5%] right-[-10%] w-[18rem] md:w-[30rem] h-[18rem] md:h-[30rem] bg-cyan-400/20 dark:bg-cyan-600/10 rounded-full blur-[80px] md:blur-[100px] pointer-events-none" />
+
       {/* FIXED NAVBAR: stays at the top */}
       <div className="fixed top-0 left-0 w-full z-50">
         <Navbar />
@@ -49,17 +55,17 @@ function TopicSelect() {
 
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl md:text-5xl font-black text-[#0F172A] tracking-tighter mb-3">
+          <h1 className="text-3xl md:text-5xl font-black text-[#0F172A] dark:text-white tracking-tighter mb-3">
             Choose Your <span className="text-violet-600">Topic</span>
           </h1>
-          <p className="text-slate-500 font-medium text-sm md:text-base">
+          <p className="text-slate-500 dark:text-slate-400 font-medium text-sm md:text-base">
             Select a topic and difficulty to start your AI mock interview
           </p>
         </div>
 
         {/* TOPIC SELECTION */}
         <div className="mb-8">
-          <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 ml-1">
+          <h2 className="text-[10px] font-black  dark:text-slate-400 uppercase tracking-widest mb-4 ml-1">
             Select Topic
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -71,7 +77,7 @@ function TopicSelect() {
                   hover:scale-[1.02] active:scale-95 text-left transform-gpu
                   ${selectedTopic === topic.name
                     ? "bg-violet-600 border-violet-600 text-white shadow-xl shadow-violet-500/30"
-                    : "bg-white/50 backdrop-blur-md border-white/60 text-[#0F172A]"
+                    : "bg-white/50 dark:bg-white/5 backdrop-blur-md border-white/60 dark:border-white/10 text-[#0F172A] dark:text-white"
                   }`}
               >
                 <div className="text-2xl md:text-3xl mb-3">{topic.icon}</div>
@@ -85,7 +91,7 @@ function TopicSelect() {
 
         {/* DIFFICULTY SELECTION */}
         <div className="mb-10">
-          <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 ml-1">
+          <h2 className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4 ml-1">
             Select Difficulty
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -96,8 +102,8 @@ function TopicSelect() {
                 className={`p-5 md:p-6 rounded-[24px] border-2 transition-all duration-200 
                   hover:scale-[1.02] active:scale-95 text-left transform-gpu
                   ${selectedDifficulty === diff.name
-                    ? "bg-[#0F172A] border-[#0F172A] text-white shadow-xl"
-                    : "bg-white/50 backdrop-blur-md border-white/60 text-[#0F172A]"
+                    ? "bg-[#0F172A] dark:bg-violet-600 border-[#0F172A] dark:border-violet-500 text-white shadow-xl"
+                    : "bg-white/50 dark:bg-white/5 backdrop-blur-md border-white/60 dark:border-white/10 text-[#0F172A] dark:text-white"
                   }`}
               >
                 <div className={`w-3 h-3 rounded-full ${diff.color} mb-3`} />
@@ -116,7 +122,7 @@ function TopicSelect() {
         <div className="pb-20"> {/* Extra bottom padding for smooth finish */}
           <button
             onClick={handleStart}
-            className="group relative w-full bg-[#0F172A] text-white font-black px-8 py-5 md:py-6 rounded-2xl shadow-xl 
+            className="group relative w-full bg-[#0F172A] dark:bg-violet-600/20 dark:border dark:border-violet-500/30 text-white font-black px-8 py-5 md:py-6 rounded-2xl shadow-xl 
               hover:scale-[1.01] active:scale-98 transition-all overflow-hidden transform-gpu"
           >
             <span className="relative z-10 uppercase tracking-[0.2em] text-xs md:text-sm">

@@ -66,7 +66,7 @@ function Register() {
             <h2 className="text-6xl font-black text-white tracking-tighter uppercase italic">
               Fluen<span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-cyan-300">tia</span>
             </h2>
-            <p className="mt-4 text-slate-500 text-[9px] tracking-[0.8em] uppercase font-bold opacity-80">Join the Infrastructure</p>
+            <p className="mt-4 text-slate-500 dark:text-slate-400 text-[9px] tracking-[0.8em] uppercase font-bold opacity-80">Join the Infrastructure</p>
           </div>
         </div>
 
@@ -124,7 +124,7 @@ function Register() {
           </form>
 
           <div className="mt-8 pt-6 border-t border-white/40 text-center">
-            <p className="text-slate-500 text-[10px] uppercase tracking-widest font-black">
+            <p className="text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-widest font-black">
               Already have an account?{' '}
               <Link to="/" className="text-violet-600 hover:text-cyan-500 transition-colors underline underline-offset-4 ml-1">
                 Sign In

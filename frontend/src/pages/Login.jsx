@@ -61,7 +61,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#E2E8F0] relative overflow-hidden font-sans">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#E2E8F0] dark:bg-[#0F172A] relative overflow-hidden font-sans">
 
       {/* Background Accents */}
       <div className="absolute top-[-10%] left-[-5%] w-[45rem] h-[45rem] bg-violet-400/20 rounded-full blur-[130px] animate-pulse pointer-events-none" />
@@ -85,7 +85,7 @@ function Login() {
               Fluen<span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-cyan-300">tia</span>
             </h2>
 
-            <p className="mt-4 text-slate-500 text-[9px] tracking-[0.8em] uppercase font-bold opacity-80">
+            <p className="mt-4 text-slate-500 dark:text-slate-400 text-[9px] tracking-[0.8em] uppercase font-bold opacity-80">
               Intelligence Infrastructure
             </p>
           </div>
@@ -94,7 +94,7 @@ function Login() {
         {/* RIGHT PANEL */}
         <div className="p-12 md:p-20 flex flex-col justify-center bg-white/20">
           <div className="mb-10">
-            <h1 className="text-4xl font-black text-[#0F172A] tracking-tight">Sign In</h1>
+            <h1 className="text-4xl font-black text-[#0F172A] dark:text-white tracking-tight">Sign In</h1>
             <p className="text-slate-600 text-sm mt-3 font-medium">Please enter your account details.</p>
           </div>
 
@@ -108,7 +108,7 @@ function Login() {
                 placeholder="name@company.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-white/50 border border-white rounded-2xl px-6 py-4 text-[#0F172A] placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400/50 transition-all text-sm"
+                className="w-full bg-white/50 border border-white rounded-2xl px-6 py-4 text-[#0F172A] dark:text-white placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400/50 transition-all text-sm"
               />
             </div>
 
@@ -123,7 +123,7 @@ function Login() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-white/50 border border-white rounded-2xl px-6 py-4 text-[#0F172A] placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400/50 transition-all text-sm"
+                className="w-full bg-white/50 border border-white rounded-2xl px-6 py-4 text-[#0F172A] dark:text-white placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-400/50 transition-all text-sm"
               />
             </div>
 
@@ -134,7 +134,7 @@ function Login() {
           </form>
 
           <div className="mt-10 pt-8 border-t border-white/40 text-center">
-            <p className="text-slate-500 text-[10px] uppercase tracking-widest font-black">
+            <p className="text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-widest font-black">
               New here?{' '}
               <Link to="/register" className="text-violet-600 hover:text-cyan-500 transition-colors underline underline-offset-4 ml-1">
                 Create Account

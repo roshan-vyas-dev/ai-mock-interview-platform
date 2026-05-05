@@ -72,7 +72,7 @@ const handleLogout = () => {
                 className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 leading-none h-full flex items-center ${
                   isActive(link.path)
                     ? "text-violet-600 dark:text-cyan-400 border-b-2 border-violet-600 dark:border-cyan-400 py-1"
-                    : "text-slate-500 dark:text-slate-400 hover:text-[#0F172A] dark:hover:text-white py-1"
+                    : "text-slate-500 dark:text-slate-400 dark:text-slate-400 hover:text-[#0F172A] dark:hover:text-white py-1"
                 }`}
               >
                 {link.name}

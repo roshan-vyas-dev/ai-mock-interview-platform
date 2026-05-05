@@ -147,7 +147,7 @@ function AdminQuestions() {
               onChange={(e) => setForm({ ...form, question: e.target.value })}
               placeholder="Enter your question here..."
               rows={3}
-              className="w-full bg-white/10 border border-white/20 rounded-2xl p-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 mb-4 resize-none"
+              className="w-full bg-white/10 border border-white/20 rounded-2xl p-4 text-white placeholder:text-slate-500 dark:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 mb-4 resize-none"
             />
 
             <div className="grid grid-cols-2 gap-4 mb-6">

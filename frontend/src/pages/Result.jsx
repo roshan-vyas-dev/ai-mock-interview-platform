@@ -37,7 +37,7 @@ function Result() {
 
   if (loading) {
     return (
-      <div className="h-screen w-full bg-[#E2E8F0] flex items-center justify-center">
+      <div className="h-screen w-full bg-[#E2E8F0]  flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-violet-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-slate-600 font-bold">Loading your results...</p>
@@ -51,7 +51,9 @@ function Result() {
     : 0;
 
   return (
-    <div className="min-h-screen w-full bg-[#E2E8F0] relative font-sans flex flex-col overflow-x-hidden">
+    <div className="min-h-screen w-full bg-[#E2E8F0] dark:bg-[#0F172A] relative font-sans flex flex-col overflow-x-hidden">
+
+      
       
       {/* FIXED NAVBAR */}
       <div className="fixed top-0 left-0 w-full z-50">
@@ -67,10 +69,10 @@ function Result() {
         
         <div className="bg-white/30 backdrop-blur-3xl border border-white/40 rounded-[32px] md:rounded-[48px] p-6 md:p-14 shadow-[0_40px_80px_-15px_rgba(0,0,0,0.1)] text-center ring-1 ring-white/50 transform-gpu">
 
-          <h1 className="text-2xl md:text-3xl font-black text-[#0F172A] tracking-tighter mb-1 uppercase italic leading-none">
+          <h1 className="text-2xl md:text-3xl font-black text-[#0F172A] dark:text-white tracking-tighter mb-1 uppercase italic leading-none">
             Fluen<span className="text-violet-600">tia</span> Report
           </h1>
-          <p className="text-slate-500 text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] mb-8">
+          <p className="text-slate-500 dark:text-slate-400 text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] mb-8">
             Performance Analytics
           </p>
 
@@ -93,7 +95,7 @@ function Result() {
             </p>
 
             <div className="relative z-10 flex items-baseline justify-center">
-              <span className="text-7xl md:text-9xl font-black text-[#0F172A] tracking-tighter leading-none">
+              <span className="text-7xl md:text-9xl font-black text-[#0F172A] dark:text-white tracking-tighter leading-none">
                 {scoreNum}
               </span>
               <span className="text-2xl md:text-4xl font-black text-slate-400 ml-2 tracking-tight">
@@ -124,7 +126,7 @@ function Result() {
 
           {/* INDIVIDUAL QUESTION RESULTS */}
           <div className="text-left mb-10">
-            <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 ml-1">
+            <h3 className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4 ml-1">
               Question Breakdown
             </h3>
             <div className="flex flex-col gap-4">
@@ -141,7 +143,7 @@ function Result() {
                       {ans.score}
                     </span>
                   </div>
-                  <p className="text-[#0F172A] font-bold text-sm mb-3">
+                  <p className="text-[#0F172A] dark:text-white font-bold text-sm mb-3">
                     {ans.question}
                   </p>
                   
@@ -169,7 +171,7 @@ function Result() {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={() => navigate("/topics")}
-              className="flex-1 bg-white/40 border border-white/60 text-[#0F172A] font-black px-8 py-4 rounded-2xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all transform-gpu"
+              className="flex-1 bg-white/40 border border-white/60 text-[#0F172A] dark:text-white font-black px-8 py-4 rounded-2xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all transform-gpu"
             >
               <span className="uppercase tracking-[0.2em] text-[10px]">
                 New Interview

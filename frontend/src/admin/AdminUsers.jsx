@@ -83,7 +83,7 @@ function AdminUsers() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search by name or email..."
-                    className="w-full bg-white/10 border border-white/20 rounded-2xl p-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 mb-6"
+                    className="w-full bg-white/10 border border-white/20 rounded-2xl p-4 text-white placeholder:text-slate-500 dark:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 mb-6"
                 />
 
                 {/* Stats row */}
@@ -140,7 +140,7 @@ function AdminUsers() {
                                             )}
                                         </div>
                                         <p className="text-slate-400 text-xs">{user.email}</p>
-                                        <p className="text-slate-500 text-[10px] mt-1">
+                                        <p className="text-slate-500 dark:text-slate-400 text-[10px] mt-1">
                                             Joined {new Date(user.createdAt).toLocaleDateString("en-IN", {
                                                 day: "numeric",
                                                 month: "short",

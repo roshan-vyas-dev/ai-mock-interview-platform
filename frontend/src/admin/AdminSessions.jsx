@@ -119,7 +119,7 @@ function AdminSessions() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by user name or email..."
-          className="w-full bg-white/10 border border-white/20 rounded-2xl p-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 mb-4"
+          className="w-full bg-white/10 border border-white/20 rounded-2xl p-4 text-white placeholder:text-slate-500 dark:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 mb-4"
         />
 
         {/* Filter */}
@@ -190,7 +190,7 @@ function AdminSessions() {
                     </div>
 
                     {/* Feedback preview */}
-                    <p className="text-slate-500 text-xs line-clamp-1">
+                    <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-1">
                       {session.overallFeedback}
                     </p>
 
@@ -211,7 +211,7 @@ function AdminSessions() {
                   <p className={`text-4xl font-black ${getScoreColor(session.totalScore)}`}>
                     {session.totalScore?.split("/")[0]}
                   </p>
-                  <p className="text-slate-500 text-xs">/10</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs">/10</p>
                 </div>
               </div>
             ))
