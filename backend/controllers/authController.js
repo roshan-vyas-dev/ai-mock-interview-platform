@@ -54,6 +54,9 @@ exports.loginUser = async (req, res) => {
     res.json({
       message: "Login success",
       token,
+      role: user.role,
+      name: user.name,
+      email: user.email,
     });
 
   } catch (err) {
@@ -65,20 +68,10 @@ exports.loginUser = async (req, res) => {
 // profile
 exports.getProfile = async (req, res) => {
   try {
-
     const user = await User.findById(req.user.id).select("-password");
-
-    res.json({
-      message: "Profile fetched",
-      user,
-    });
-
+    res.json(user);
   } catch (error) {
-
-    res.status(500).json({
-      message: error.message,
-    });
-
+    res.status(500).json({ message: error.message });
   }
 };
 

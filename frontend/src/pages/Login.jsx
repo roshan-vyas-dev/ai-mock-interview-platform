@@ -27,10 +27,11 @@ function Login() {
       );
 
       console.log(res);
-      
+
 
       // Save token
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.role);
 
       toast.success("Login Successful!", {
         position: "top-right",
@@ -39,7 +40,11 @@ function Login() {
       });
 
       setTimeout(() => {
-        navigate("/dashboard");
+        if (res.data.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/dashboard");
+        }
       }, 1000);
 
     } catch (error) {

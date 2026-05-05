@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -15,22 +15,34 @@ import AdminQuestions from "./admin/AdminQuestions";
 import AdminUsers from "./admin/AdminUsers";
 import AdminSessions from "./admin/AdminSessions";
 
+// Admin protected route
+const AdminRoute = ({ children }) => {
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+  if (!token || role !== "admin") {
+    return <Navigate to="/login" />;
+  }
+  return children;
+};
+
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<ProtectedRoute>   <Dashboard /> </ProtectedRoute>} />
-        <Route path="/interview" element={<Interview />} />
-        <Route path="/result" element={<Result />} />
-        <Route path="/history" element={<History />} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/interview" element={<ProtectedRoute><Interview /></ProtectedRoute>} />
+        <Route path="/result" element={<ProtectedRoute><Result /></ProtectedRoute>} />
+        <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/topics" element={<ProtectedRoute><TopicSelect /></ProtectedRoute>} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/questions" element={<AdminQuestions />} />
-        <Route path="/admin/users" element={<AdminUsers />} />
-        <Route path="/admin/sessions" element={<AdminSessions />} />
+        <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+        <Route path="/admin/questions" element={<AdminRoute><AdminQuestions /></AdminRoute>} />
+        <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+        <Route path="/admin/sessions" element={<AdminRoute><AdminSessions /></AdminRoute>} />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
       <ToastContainer
         position="top-right"
@@ -42,7 +54,7 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="dark" // Dark theme looks much better with your #0F172A navy accents
+        theme="dark"
         toastClassName="bg-[#0F172A] border border-white/20 backdrop-blur-lg rounded-2xl shadow-2xl"
         bodyClassName="font-sans text-xs font-black uppercase tracking-widest"
         progressClassName="bg-gradient-to-r from-violet-600 to-cyan-400"

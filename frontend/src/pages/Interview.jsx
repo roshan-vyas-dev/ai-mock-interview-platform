@@ -74,8 +74,11 @@ function Interview() {
     setSubmitting(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `http://localhost:5000/api/questions?topic=${topic}&difficulty=${difficulty}`,
+
+      // FIX 1: Change axios.get to axios.post
+      // FIX 2: Change the URL to the submission endpoint
+      const res = await axios.post(
+        "http://localhost:5000/api/interview/submit",
         {
           topic,
           difficulty,
@@ -83,11 +86,18 @@ function Interview() {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // Save interview ID to localStorage for result page
-      localStorage.setItem("interviewId", res.data.interview._id);
-      navigate("/result");
+
+      // FIX 3: Check if the ID is nested in res.data or res.data.interview
+      const interviewId = res.data.interview?._id || res.data._id;
+
+      if (interviewId) {
+        localStorage.setItem("interviewId", interviewId);
+        navigate("/result");
+      } else {
+        throw new Error("No Interview ID returned");
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Submission Error:", error);
       alert("Something went wrong! Please try again.");
     } finally {
       setSubmitting(false);
