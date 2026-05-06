@@ -19,7 +19,7 @@ function AdminSessions() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "http://localhost:5000/api/admin/sessions",
+        "https://ai-mock-interview-platform-bn7e.onrender.com/api/admin/sessions",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSessions(res.data);

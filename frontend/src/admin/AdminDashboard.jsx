@@ -20,13 +20,13 @@ function AdminDashboard() {
       const token = localStorage.getItem("token");
 
       const [usersRes, sessionsRes, questionsRes] = await Promise.all([
-        axios.get("http://localhost:5000/api/admin/users", {
+        axios.get("https://ai-mock-interview-platform-bn7e.onrender.com/api/admin/users", {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get("http://localhost:5000/api/admin/sessions", {
+        axios.get("https://ai-mock-interview-platform-bn7e.onrender.com/api/admin/sessions", {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get("http://localhost:5000/api/questions", {
+        axios.get("https://ai-mock-interview-platform-bn7e.onrender.com/api/questions", {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);

@@ -21,7 +21,7 @@ function Interview() {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          `http://localhost:5000/api/questions?topic=${topic}&difficulty=${difficulty}`,
+          `https://ai-mock-interview-platform-bn7e.onrender.com/api/questions?topic=${topic}&difficulty=${difficulty}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setQuestions(res.data);
@@ -78,7 +78,7 @@ function Interview() {
       // FIX 1: Change axios.get to axios.post
       // FIX 2: Change the URL to the submission endpoint
       const res = await axios.post(
-        "http://localhost:5000/api/interview/submit",
+        "https://ai-mock-interview-platform-bn7e.onrender.com/api/interview/submit",
         {
           topic,
           difficulty,

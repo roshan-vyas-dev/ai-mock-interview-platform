@@ -27,7 +27,7 @@ function Profile() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "http://localhost:5000/api/auth/profile",
+        "https://ai-mock-interview-platform-bn7e.onrender.com/api/auth/profile",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setUser(res.data);
@@ -43,7 +43,7 @@ function Profile() {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        "http://localhost:5000/api/auth/update-profile",
+        "https://ai-mock-interview-platform-bn7e.onrender.com/api/auth/update-profile",
         { name: nameForm.name },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -71,7 +71,7 @@ function Profile() {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        "http://localhost:5000/api/auth/change-password",
+        "https://ai-mock-interview-platform-bn7e.onrender.com/api/auth/change-password",
         {
           currentPassword: passwordForm.currentPassword,
           newPassword: passwordForm.newPassword,

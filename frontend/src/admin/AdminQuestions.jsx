@@ -25,7 +25,7 @@ function AdminQuestions() {
   const fetchQuestions = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/questions", {
+      const res = await axios.get("https://ai-mock-interview-platform-bn7e.onrender.com/api/questions", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setQuestions(res.data);
@@ -45,13 +45,13 @@ function AdminQuestions() {
       const token = localStorage.getItem("token");
       if (editQuestion) {
         await axios.put(
-          `http://localhost:5000/api/questions/${editQuestion._id}`,
+          `https://ai-mock-interview-platform-bn7e.onrender.com/api/questions/${editQuestion._id}`,
           form,
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
         await axios.post(
-          "http://localhost:5000/api/questions",
+          "https://ai-mock-interview-platform-bn7e.onrender.com/api/questions",
           form,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -79,7 +79,7 @@ function AdminQuestions() {
     if (!window.confirm("Delete this question?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/questions/${id}`, {
+      await axios.delete(`https://ai-mock-interview-platform-bn7e.onrender.com/api/questions/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchQuestions();

@@ -20,7 +20,7 @@ function Result() {
         }
 
         const res = await axios.get(
-          `http://localhost:5000/api/interview/${interviewId}`,
+          `https://ai-mock-interview-platform-bn7e.onrender.com/api/interview/${interviewId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

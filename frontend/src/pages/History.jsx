@@ -19,7 +19,7 @@ function History() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "http://localhost:5000/api/interview/my-interviews",
+        "https://ai-mock-interview-platform-bn7e.onrender.com/api/interview/my-interviews",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setInterviews(res.data);

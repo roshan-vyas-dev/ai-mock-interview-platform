@@ -18,13 +18,13 @@ function Dashboard() {
       const token = localStorage.getItem("token");
 
       const userRes = await axios.get(
-        "http://localhost:5000/api/auth/profile",
+        "https://ai-mock-interview-platform-bn7e.onrender.com/api/auth/profile",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setUser(userRes.data);
 
       const interviewRes = await axios.get(
-        "http://localhost:5000/api/interview/my-interviews",
+        "https://ai-mock-interview-platform-bn7e.onrender.com/api/interview/my-interviews",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setInterviews(interviewRes.data);
