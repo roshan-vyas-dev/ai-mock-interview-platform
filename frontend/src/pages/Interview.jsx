@@ -147,7 +147,6 @@ function Interview() {
       </header>
 
       {/* MAIN */}
-      {/* MAIN */}
       <main className="relative z-10 flex-1 flex flex-col gap-6 max-w-5xl mx-auto w-full p-2">
 
         {/* Unified Dashboard Container */}
@@ -165,7 +164,7 @@ function Interview() {
             {loading ? (
               <div className="h-8 w-48 bg-white/10 animate-pulse rounded-lg" />
             ) : questions.length > 0 ? (
-              <h2 className="text-xl md:text-2xl font-bold text-white leading-snug">
+              <h2 className="text-xl md:text-2xl font-bold text-slate-900   dark:text-white leading-snug transition-colors duration-300">
                 {questions[currentQuestion]?.question}
               </h2>
             ) : (
